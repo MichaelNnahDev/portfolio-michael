@@ -1,11 +1,1201 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// src/pages/index.astro
+// Static build with zero runtime server overhead
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Michael Nnah | WordPress Performance & Cloud Infrastructure Engineer</title>
+    <meta
+      name="description"
+      content="High-performance WordPress systems, custom MU-plugins, Linux cloud administration, and zero-downtime Cloudflare edge routing."
+    />
+    <link rel="canonical" href="https://portfolio.michaelnnah.com/" />
+
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style is:inline>
+      :root {
+        --bg-base: #0B0C10;
+        --card-surface: rgba(18, 20, 26, 0.88);
+        --border-subtle: #20242D;
+        --border-gold: #E6CA65;
+        --gold-primary: #E6CA65;
+        --gold-deep: #D4AF37;
+        --gold-glow: rgba(230, 202, 101, 0.18);
+        --text-pure: #FFFFFF;
+        --text-alabaster: #F4F4F6;
+        --text-muted: #9CA3AF;
+        --emerald-green: #10B981;
+        --focus-blue: #60a5fa;
+        --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+        --font-mono: 'Fira Code', ui-monospace, monospace;
+      }
+
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        background-color: var(--bg-base);
+        color: var(--text-alabaster);
+        font-family: var(--font-body);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* WCAG 2.1 AA Keyboard Navigation Skip Link */
+      .skip-link {
+        position: absolute;
+        top: -999px;
+        left: 1rem;
+        background: var(--gold-primary);
+        color: #0B0C10;
+        padding: 0.6rem 1.2rem;
+        font-weight: 700;
+        border-radius: 4px;
+        z-index: 9999;
+        text-decoration: none;
+      }
+      .skip-link:focus {
+        top: 1rem;
+      }
+
+      /* Strict Accessible Focus Rings */
+      *:focus-visible {
+        outline: 3px solid var(--focus-blue) !important;
+        outline-offset: 3px !important;
+      }
+
+      /* Three.js Background Canvas */
+      #webgl-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.28;
+      }
+
+      /* Content Container */
+      .shell-container {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: clamp(30px, 6vw, 80px) clamp(16px, 4vw, 36px);
+      }
+
+      /* Status Pill Badge */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 14px;
+        border-radius: 999px;
+        background: rgba(230, 202, 101, 0.08);
+        border: 1px solid rgba(230, 202, 101, 0.35);
+        color: var(--gold-primary);
+        font-family: var(--font-mono);
+        font-size: clamp(0.72rem, 1.8vw, 0.8rem);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 22px;
+        backdrop-filter: blur(8px);
+      }
+
+      .pulse-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--emerald-green);
+        box-shadow: 0 0 10px var(--emerald-green);
+        animation: livePulse 2s infinite ease-in-out;
+      }
+
+      @keyframes livePulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.4; transform: scale(0.85); }
+      }
+
+      /* Hero Layout */
+      .hero-layout {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: clamp(24px, 4vw, 48px);
+        align-items: center;
+        margin-bottom: clamp(60px, 8vw, 100px);
+      }
+
+      .hero-h1 {
+        font-family: var(--font-heading);
+        font-weight: 800;
+        font-size: clamp(2.2rem, 5.2vw, 3.8rem);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        color: var(--text-pure);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+      }
+
+      .gold-highlight {
+        color: var(--gold-primary);
+        background: linear-gradient(135deg, #FFFFFF 20%, var(--gold-primary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero-p {
+        font-size: clamp(0.95rem, 2.2vw, 1.08rem);
+        color: var(--text-muted);
+        max-width: 580px;
+        margin-bottom: 32px;
+        line-height: 1.65;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .btn-gold, .btn-ghost {
+        min-height: 48px;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-family: var(--font-heading);
+        font-size: 0.92rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .btn-gold {
+        background: var(--gold-primary);
+        color: #0B0C10;
+        font-weight: 700;
+      }
+
+      .btn-gold:hover {
+        background: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px var(--gold-glow);
+      }
+
+      .btn-ghost {
+        background: rgba(18, 20, 26, 0.6);
+        color: var(--text-pure);
+        font-weight: 600;
+        border: 1px solid var(--border-subtle);
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-ghost:hover {
+        border-color: var(--gold-primary);
+        background: rgba(230, 202, 101, 0.05);
+        color: var(--gold-primary);
+      }
+
+      /* Terminal Console */
+      .terminal-box {
+        background: rgba(11, 13, 18, 0.95);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.75);
+        backdrop-filter: blur(16px);
+        width: 100%;
+      }
+
+      .terminal-tabs {
+        background: #12141A;
+        display: flex;
+        border-bottom: 1px solid var(--border-subtle);
+        overflow-x: auto;
+      }
+
+      .term-tab {
+        padding: 12px 18px;
+        min-height: 44px;
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        color: var(--text-muted);
+        border: none;
+        border-right: 1px solid var(--border-subtle);
+        cursor: pointer;
+        background: transparent;
+        transition: background 0.2s ease, color 0.2s ease;
+        white-space: nowrap;
+      }
+
+      .term-tab.active {
+        color: var(--gold-primary);
+        background: rgba(230, 202, 101, 0.08);
+        border-bottom: 2px solid var(--gold-primary);
+      }
+
+      .terminal-content {
+        padding: clamp(14px, 3vw, 22px);
+        font-family: var(--font-mono);
+        font-size: clamp(0.75rem, 1.8vw, 0.84rem);
+        color: #D1D5DB;
+        line-height: 1.6;
+        min-height: 230px;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .c-prompt { color: var(--gold-primary); }
+      .c-cmd { color: #FFFFFF; font-weight: 600; }
+      .c-green { color: var(--emerald-green); font-weight: 600; }
+      .c-dim { color: #9CA3AF; }
+
+      /* Tech Stack Chips */
+      .stack-section {
+        margin-bottom: clamp(60px, 8vw, 90px);
+      }
+
+      .section-tag {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--gold-primary);
+        margin-bottom: 14px;
+        display: block;
+        font-weight: 600;
+      }
+
+      .stack-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .stack-pill {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-family: var(--font-mono);
+        font-size: clamp(0.75rem, 1.8vw, 0.82rem);
+        color: var(--text-pure);
+        backdrop-filter: blur(8px);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .stack-pill:hover {
+        border-color: var(--gold-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px var(--gold-glow);
+      }
+
+      /* Production Projects Grid */
+      .projects-section {
+        margin-bottom: clamp(60px, 8vw, 90px);
+      }
+
+      .section-h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        font-weight: 800;
+        color: var(--text-pure);
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        margin-bottom: 28px;
+      }
+
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+        gap: 22px;
+        width: 100%;
+      }
+
+      .project-card {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: clamp(22px, 3.5vw, 32px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 360px;
+        backdrop-filter: blur(12px);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+        width: 100%;
+      }
+
+      .project-card:hover {
+        border-color: var(--gold-primary);
+        transform: translateY(-3px);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 20px var(--gold-glow);
+      }
+
+      .card-h3 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.3rem, 2.5vw, 1.55rem);
+        font-weight: 700;
+        color: var(--text-pure);
+        margin-bottom: 6px;
+      }
+
+      .card-subtitle {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 18px;
+      }
+
+      .tags-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 24px;
+      }
+
+      .p-tag {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        background: #0B0C10;
+        border: 1px solid var(--border-subtle);
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: #D1D5DB;
+        line-height: 1.3;
+      }
+
+      .p-tag-gold {
+        border-color: rgba(230, 202, 101, 0.45);
+        color: var(--gold-primary);
+        background: rgba(230, 202, 101, 0.08);
+        font-weight: 600;
+      }
+
+      .launch-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 44px;
+        color: var(--gold-primary);
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: gap 0.2s ease, color 0.2s ease;
+        margin-top: auto;
+      }
+
+      .project-card:hover .launch-link {
+        gap: 10px;
+        color: #FFFFFF;
+      }
+
+      /* Open Source Repositories */
+      .github-section {
+        margin-bottom: clamp(60px, 8vw, 90px);
+      }
+
+      .github-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+        gap: 20px;
+        width: 100%;
+      }
+
+      .github-card {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: clamp(20px, 3vw, 26px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 240px;
+        backdrop-filter: blur(12px);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+        width: 100%;
+      }
+
+      .github-card:hover {
+        border-color: var(--gold-primary);
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.75), 0 0 16px var(--gold-glow);
+      }
+
+      .gh-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+      }
+
+      .gh-icon {
+        color: var(--gold-primary);
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+
+      .gh-name {
+        font-family: var(--font-mono);
+        font-size: 0.94rem;
+        font-weight: 700;
+        color: var(--text-pure);
+        word-break: break-word;
+      }
+
+      .gh-desc {
+        font-size: 0.86rem;
+        color: var(--text-muted);
+        line-height: 1.55;
+        margin-bottom: 18px;
+      }
+
+      .gh-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: auto;
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .gh-lang {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: #D1D5DB;
+      }
+
+      .gh-lang-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      .dot-php { background: #4F5D95; }
+      .dot-bash { background: #89E051; }
+      .dot-js { background: #F1E05A; }
+      .dot-config { background: var(--gold-primary); }
+
+      .gh-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 44px;
+        color: var(--gold-primary);
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        transition: gap 0.2s ease, color 0.2s ease;
+      }
+
+      .github-card:hover .gh-link {
+        gap: 8px;
+        color: #FFFFFF;
+      }
+
+      /* Engineer Bio Section */
+      .engineer-section {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: clamp(24px, 4vw, 48px);
+        align-items: center;
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        padding: clamp(24px, 4vw, 40px);
+        margin-bottom: clamp(60px, 8vw, 90px);
+        backdrop-filter: blur(12px);
+        width: 100%;
+      }
+
+      .engineer-image-wrapper {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border-subtle);
+        max-width: 320px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .engineer-image-wrapper img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 768 / 953;
+        display: block;
+        filter: grayscale(15%) contrast(105%);
+        transition: filter 0.3s ease;
+      }
+
+      .engineer-image-wrapper:hover img {
+        filter: grayscale(0%) contrast(100%);
+      }
+
+      .engineer-bio h3 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.4rem, 3vw, 1.8rem);
+        font-weight: 800;
+        color: var(--text-pure);
+        margin-bottom: 6px;
+        text-transform: uppercase;
+      }
+
+      .engineer-title {
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        color: var(--gold-primary);
+        margin-bottom: 18px;
+        display: block;
+        font-weight: 600;
+      }
+
+      .engineer-bio p {
+        font-size: 0.95rem;
+        color: var(--text-muted);
+        line-height: 1.65;
+        margin-bottom: 16px;
+      }
+
+      .guarantee-box {
+        background: rgba(11, 12, 16, 0.85);
+        border: 1px solid rgba(230, 202, 101, 0.3);
+        border-radius: 8px;
+        padding: 14px 18px;
+        margin-top: 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .guarantee-icon {
+        color: var(--gold-primary);
+        font-size: 1.2rem;
+        line-height: 1;
+      }
+
+      .guarantee-text {
+        font-size: 0.86rem;
+        color: var(--text-alabaster);
+        line-height: 1.5;
+      }
+
+      /* Comparison Matrix */
+      .comparison-section {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        padding: clamp(20px, 4vw, 40px);
+        margin-bottom: clamp(60px, 8vw, 90px);
+        backdrop-filter: blur(12px);
+        width: 100%;
+      }
+
+      .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .comp-table {
+        width: 100%;
+        min-width: 580px;
+        border-collapse: collapse;
+        margin-top: 18px;
+      }
+
+      .comp-table th, .comp-table td {
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-subtle);
+        font-size: clamp(0.82rem, 1.8vw, 0.9rem);
+      }
+
+      .comp-table th {
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        letter-spacing: 0.06em;
+      }
+
+      .comp-table td.focus-gold {
+        color: var(--gold-primary);
+        font-weight: 600;
+      }
+
+      /* Footer CTA */
+      .footer-cta {
+        text-align: center;
+        padding: clamp(36px, 6vw, 64px) 20px;
+        background: radial-gradient(circle at center, rgba(230, 202, 101, 0.08) 0%, transparent 70%);
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        backdrop-filter: blur(12px);
+      }
+
+      .footer-cta h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        font-weight: 800;
+        color: var(--text-pure);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+
+      /* Mobile 360–414px Viewport Constraints */
+      @media (max-width: 960px) {
+        .hero-layout, .engineer-section {
+          grid-template-columns: 1fr;
+          gap: 36px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .shell-container {
+          padding: 24px 14px;
+        }
+        .hero-actions {
+          flex-direction: column;
+          width: 100%;
+          gap: 12px;
+        }
+        .btn-gold, .btn-ghost {
+          width: 100%;
+        }
+        .project-card, .github-card {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Animated Torus Knot WebGL Canvas -->
+    <canvas id="webgl-bg" aria-hidden="true"></canvas>
+
+    <div class="studio-shell">
+      <main id="main" class="shell-container">
+        <!-- Hero Section -->
+        <section class="hero-layout" aria-label="Introduction">
+          <div>
+            <div class="status-badge">
+              <span class="pulse-indicator" aria-hidden="true"></span>
+              <span>6/6 Production Systems Monitored &amp; Live</span>
+            </div>
+            <h1 class="hero-h1">
+              High-Performance <span class="gold-highlight">WordPress</span> &amp; Cloud Systems.
+            </h1>
+            <p class="hero-p">
+              Replacing bloated plugins with lightweight custom PHP, orchestrating zero-downtime server migrations between Hostinger and Cloudflare edge layers, and automating Linux root operations.
+            </p>
+            <div class="hero-actions">
+              <a href="#projects" class="btn-gold">Explore Live Systems &rarr;</a>
+              <a href="https://www.upwork.com" target="_blank" rel="noopener noreferrer" class="btn-ghost">Hire On Upwork</a>
+            </div>
+          </div>
+
+          <!-- Interactive Terminal Card -->
+          <div class="terminal-box" role="region" aria-label="Telemetry Terminal Console">
+            <div class="terminal-tabs" role="tablist">
+              <button class="term-tab active" role="tab" aria-selected="true" aria-controls="termOutput" id="tab-0">wp-cli.sh</button>
+              <button class="term-tab" role="tab" aria-selected="false" aria-controls="termOutput" id="tab-1">edge-routing.cf</button>
+              <button class="term-tab" role="tab" aria-selected="false" aria-controls="termOutput" id="tab-2">s3-cron.bash</button>
+            </div>
+            <div class="terminal-content" id="termOutput" role="tabpanel" aria-labelledby="tab-0" tabindex="0">
+<div><span class="c-prompt">$</span> <span class="c-cmd">wp --info &amp;&amp; check_mesh_status</span></div>
+<div class="c-dim">OS: Linux Ubuntu 22.04 LTS (x86_64)</div>
+<div class="c-dim">Origin: Hostinger Origin Infrastructure <span class="c-green">[HARDENED]</span></div>
+<div class="c-dim">Security: Grade-A HTTP Security Headers Verified</div>
+<div class="c-dim">SEO Engine: Native Social Graph PHP Active Across All 6 Sites</div>
+<br/>
+<div><span class="c-prompt">$</span> <span class="c-cmd">verify_custom_code</span></div>
+<div>[✓] Custom Checkout (Proof Upload): <span class="c-green">ACTIVE</span></div>
+<div>[✓] Social Proof Popup Engine: <span class="c-green">RUNNING</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tech Stack Badges -->
+        <section class="stack-section" aria-label="Technical stack">
+          <span class="section-tag">Engineering &amp; Cloud Stack</span>
+          <div class="stack-grid">
+            <div class="stack-pill">Hostinger Origin</div>
+            <div class="stack-pill">AWS (EC2 / S3)</div>
+            <div class="stack-pill">Cloudflare CDN Edge</div>
+            <div class="stack-pill">Linux CLI &amp; Bash</div>
+            <div class="stack-pill">Ubuntu Server</div>
+            <div class="stack-pill">Git &amp; GitHub</div>
+            <div class="stack-pill">PHP 8.2 (MU-Plugins)</div>
+            <div class="stack-pill">WooCommerce Core</div>
+            <div class="stack-pill">Elementor Engine</div>
+            <div class="stack-pill">JavaScript (ES6+)</div>
+            <div class="stack-pill">HTML5 / Modern CSS</div>
+            <div class="stack-pill">WP Code Snippets</div>
+          </div>
+        </section>
+
+        <!-- Live Projects -->
+        <section class="projects-section" id="projects" aria-label="Production Platforms">
+          <span class="section-tag">Live Architectures</span>
+          <h2 class="section-h2">Production Platforms Managed</h2>
+
+          <div class="portfolio-grid">
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Hammer And Host</h3>
+                <div class="card-subtitle">Consultancy &amp; Agency Brand Suite</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Optimized Lead Forms</span>
+                  <span class="p-tag">Cloudflare Edge</span>
+                  <span class="p-tag">Elementor Engine</span>
+                </div>
+              </div>
+              <a href="https://www.hammerandhost.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Lifebridgecare Foundation</h3>
+                <div class="card-subtitle">NGO Brand Suite &amp; Direct Donations</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Optimized Lead Forms</span>
+                  <span class="p-tag">AWS S3 Backups</span>
+                  <span class="p-tag">Custom Modal Trigger</span>
+                </div>
+              </div>
+              <a href="https://www.lifebridgecarefoundation.ng" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Zanywholesales Hub</h3>
+                <div class="card-subtitle">High-Volume Wholesale E-Commerce</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Custom Checkout (Proof Upload)</span>
+                  <span class="p-tag p-tag-gold">Social Proof Popup Snippet</span>
+                  <span class="p-tag">Cloudflare CDN Edge</span>
+                </div>
+              </div>
+              <a href="https://www.zanywholesaleshub.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Shop With Simi</h3>
+                <div class="card-subtitle">Digital Commerce Solution</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Custom Checkout (Proof Upload)</span>
+                  <span class="p-tag">Cloudflare CDN Edge</span>
+                  <span class="p-tag">WooCommerce</span>
+                </div>
+              </div>
+              <a href="https://www.shopwithsimi.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Michelleaccessorize</h3>
+                <div class="card-subtitle">Digital Commerce Solution</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Custom Checkout (Proof Upload)</span>
+                  <span class="p-tag">Cloudflare CDN Edge</span>
+                  <span class="p-tag">WooCommerce</span>
+                </div>
+              </div>
+              <a href="https://www.michelleaccessorize.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">CSK Hospitality</h3>
+                <div class="card-subtitle">Hospitality Brand Suite &amp; Bookings</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag">Cloudflare SSL/TLS</span>
+                  <span class="p-tag">Dynamic UI Routing</span>
+                  <span class="p-tag">Hostinger CLI</span>
+                </div>
+              </div>
+              <a href="https://www.cskhospitality.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Developer Repositories -->
+        <section class="github-section" id="open-source" aria-label="Open Source Work">
+          <span class="section-tag">Open-Source Code &amp; DevOps Blueprints</span>
+          <h2 class="section-h2">Developer Repositories &amp; Modules</h2>
+
+          <div class="github-grid">
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">aws-s3-backup-autoupdate-engine</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Automated 5 AM daily MySQL &amp; site file backup to Amazon S3 with staggered plugin/theme update routines, cache flush, and email health alerts.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-php"></span> PHP / AWS SDK</span>
+                <a href="https://github.com/MichaelNnahDev/aws-s3-backup-autoupdate-engine" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">woocommerce-checkout-payment-proof</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Zero-plugin WooCommerce checkout extension injecting multipart payment proof receipt upload validation into order metadata and fulfillment screens.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-php"></span> PHP / WooCommerce</span>
+                <a href="https://github.com/MichaelNnahDev/woocommerce-checkout-payment-proof-upload.git" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">lightweight-social-proof-engine</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  High-converting, zero-bloat recent sales notification popup engine querying live order records asynchronously without degrading Core Web Vitals.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-js"></span> JavaScript / PHP</span>
+                <a href="https://github.com/MichaelNnahDev/flashproof-sales-popup-for-woo" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">wp-native-seo-social-graph</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Lightweight head injection script generating Open Graph meta, Twitter Cards, canonical tagging, and favicon matrices without third-party SEO plugins.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-php"></span> PHP / Head Hook</span>
+                <a href="https://github.com/MichaelNnahDev/wp-native-seo-social-graph" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">zero-downtime-cloudflare-migration</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Step-by-step low-TTL DNS staging and proxy cutover runbook for transitioning live e-commerce production origins to Cloudflare CDN edge without downtime.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-config"></span> Cloudflare / DNS</span>
+                <a href="https://github.com/MichaelNnahDev/zero-downtime-cloudflare-migration" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">wordpress-security-headers-hardening</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Hardened server rules deploying HSTS, CSP, and clickjacking protection achieving Grade-A+ SecurityHeaders rating.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-config"></span> Apache / .htaccess</span>
+                <a href="https://github.com/MichaelNnahDev/security-headers-wordpress-hardening.git" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">hostinger-linux-ssh-automation</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Linux CLI configuration guide for key-based authentication, custom SSH port mapping, persistent multiplexing, and automated terminal aliases.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-bash"></span> Bash / OpenSSH</span>
+                <a href="https://github.com/MichaelNnahDev/hostinger-linux-ssh-automation" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Engineer Bio -->
+        <section class="engineer-section" aria-label="About the Engineer">
+          <div class="engineer-image-wrapper">
+            <img
+              src="/images/profile.webp"
+              alt="Michael Nnah - WordPress Performance and Cloud Infrastructure Engineer"
+              width="320"
+              height="397"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <div class="engineer-bio">
+            <h3>Michael Nnah</h3>
+            <span class="engineer-title">WordPress Performance &amp; Cloud Infrastructure Engineer</span>
+            <p>
+              I operate at the intersection of custom WordPress development and Linux cloud administration. While many freelancers rely heavily on off-the-shelf plugins that cause database drag and security vulnerabilities, my workflow centers on clean PHP hooks, custom MU-plugins, and terminal-level optimization.
+            </p>
+            <p>
+              Whether configuring zero-downtime Cloudflare edge proxies, hardening Hostinger origin nodes with Grade-A HTTP headers, or automating encrypted daily MySQL snapshots to Amazon S3, every site is engineered for peak conversion and continuous uptime.
+            </p>
+            <div class="guarantee-box">
+              <span class="guarantee-icon" aria-hidden="true">&lowast;</span>
+              <div class="guarantee-text">
+                <strong>The Zero-Downtime Migration Standard:</strong> Every DNS cutover, database transition, and CDN edge deployment is engineered with low-TTL propagation bridges and transactional integrity — protecting active checkouts and customer orders from disruption.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Comparison Matrix -->
+        <section class="comparison-section" aria-label="Engineering Standards Comparison">
+          <span class="section-tag">Engineering Difference</span>
+          <h2 class="section-h2" style="font-size: clamp(1.4rem, 3.5vw, 1.8rem); margin-bottom: 8px;">Code-First Engineering vs Plugin Overload</h2>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">Direct comparisons of how these production environments operate compared to generic site setups.</p>
+
+          <div class="table-scroll">
+            <table class="comp-table">
+              <thead>
+                <tr>
+                  <th scope="col">Architecture Vector</th>
+                  <th scope="col">Standard WordPress Freelancer</th>
+                  <th scope="col">My Custom Engineering Approach</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Checkout &amp; Features</th>
+                  <td>Installs 3–5 heavy third-party plugins</td>
+                  <td class="focus-gold">Lightweight PHP Snippets (Payment Proof, Modals &amp; Popups)</td>
+                </tr>
+                <tr>
+                  <th scope="row">Security &amp; SEO Graph</th>
+                  <td>Unconfigured shared headers</td>
+                  <td class="focus-gold">Grade-A HTTP Security Headers + Lightweight PHP Social Graph</td>
+                </tr>
+                <tr>
+                  <th scope="row">Origin &amp; Edge Routing</th>
+                  <td>Standard DNS with migration downtime</td>
+                  <td class="focus-gold">Hardened Hostinger Origin + Zero-Downtime Cloudflare Edge</td>
+                </tr>
+                <tr>
+                  <th scope="row">Backups &amp; Redundancy</th>
+                  <td>Manual local zip exports</td>
+                  <td class="focus-gold">Automated Daily Encrypted Snapshots to Amazon S3</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Footer Call to Action -->
+        <footer class="footer-cta">
+          <h2>Need Enterprise-Grade WordPress?</h2>
+          <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 28px auto; font-size: 0.95rem;">
+            Available for zero-downtime migrations, plugin-free WooCommerce custom engineering, and automated cloud retainers.
+          </p>
+          <a href="https://www.upwork.com" target="_blank" rel="noopener noreferrer" class="btn-gold">Hire on Upwork Today &rarr;</a>
+        </footer>
+      </main>
+    </div>
+
+    <!-- Deferred Interactive Scripts -->
+    <script is:inline>
+      // 1. Accessible Terminal Tab Switcher
+      const termData = [
+        `<div><span class="c-prompt">$</span> <span class="c-cmd">wp --info && check_mesh_status</span></div>
+<div class="c-dim">OS: Linux Ubuntu 22.04 LTS (x86_64)</div>
+<div class="c-dim">Origin: Hostinger Origin Infrastructure <span class="c-green">[HARDENED]</span></div>
+<div class="c-dim">Security: Grade-A HTTP Security Headers Verified</div>
+<div class="c-dim">SEO Engine: Native Social Graph PHP Active Across All 6 Sites</div>
+<br>
+<div><span class="c-prompt">$</span> <span class="c-cmd">verify_custom_code</span></div>
+<div>[✓] Custom Checkout (Proof Upload): <span class="c-green">ACTIVE</span></div>
+<div>[✓] Social Proof Popup Engine: <span class="c-green">RUNNING</span></div>`,
+
+        `<div><span class="c-prompt">$</span> <span class="c-cmd">cloudflare-cli --zone-verify --all</span></div>
+<div class="c-dim">Edge Proxy: Cloudflare Enterprise Anycast CDN</div>
+<div class="c-dim">SSL/TLS: Strict (End-to-End Encryption)</div>
+<div class="c-dim">Migration Downtime: <span class="c-green">0.00 Seconds (Active Proxy)</span></div>
+<br>
+<div><span class="c-prompt">$</span> <span class="c-cmd">edge-cache-purge --smart</span></div>
+<div>[✓] Edge Cache Revalidated: <span class="c-green">100% OK</span></div>`,
+
+        `<div><span class="c-prompt">$</span> <span class="c-cmd">cat /etc/cron.daily/s3_backup.sh</span></div>
+<div class="c-dim">Target: s3://production-vault/backups/</div>
+<div class="c-dim">MySQL Dump: Compressed GZ + AES-256</div>
+<div class="c-dim">Automated Update: Verified Plugin Core Health</div>
+<br>
+<div><span class="c-prompt">$</span> <span class="c-cmd">aws s3 ls --human-readable</span></div>
+<div>[✓] Backup Status: <span class="c-green">SYNCHRONIZED DAILY</span></div>`
+      ];
+
+      const tabs = document.querySelectorAll('.term-tab');
+      const output = document.getElementById('termOutput');
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((t, i) => {
+            const isActive = i === index;
+            t.classList.toggle('active', isActive);
+            t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+          output.innerHTML = termData[index];
+          output.setAttribute('aria-labelledby', tab.id);
+        });
+      });
+
+      // 2. Performance-Deferred Three.js Loader (Executes only after main thread settles)
+      const initThreeMesh = () => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        script.async = true;
+        script.onload = () => {
+          const canvas = document.getElementById('webgl-bg');
+          if (!canvas || typeof THREE === 'undefined') return;
+
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+          camera.position.z = 26;
+
+          const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+          const geometry = new THREE.TorusKnotGeometry(9, 2.2, 80, 16, 2, 3);
+          const material = new THREE.MeshBasicMaterial({
+            color: 0xE6CA65,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.12
+          });
+
+          const mesh = new THREE.Mesh(geometry, material);
+          scene.add(mesh);
+
+          let mouseX = 0, mouseY = 0;
+          let targetX = 0, targetY = 0;
+
+          window.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 1.2;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 1.2;
+          }, { passive: true });
+
+          window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          }, { passive: true });
+
+          function renderLoop() {
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+            mesh.rotation.x += 0.0018 + mouseY * 0.008;
+            mesh.rotation.y += 0.0025 + mouseX * 0.008;
+            renderer.render(scene, camera);
+            requestAnimationFrame(renderLoop);
+          }
+          renderLoop();
+        };
+        document.body.appendChild(script);
+      };
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(initThreeMesh);
+      } else {
+        window.addEventListener('load', initThreeMesh);
+      }
+    </script>
+  </body>
+</html>
