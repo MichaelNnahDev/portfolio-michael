@@ -15,14 +15,6 @@
     />
     <link rel="canonical" href="https://portfolio.michaelnnah.com/" />
 
-    <!-- Preconnect to Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
     <style is:inline>
       :root {
         --bg-base: #0B0C10;
@@ -37,9 +29,9 @@
         --text-muted: #9CA3AF;
         --emerald-green: #10B981;
         --focus-blue: #60a5fa;
-        --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-        --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-        --font-mono: 'Fira Code', ui-monospace, monospace;
+        --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       }
 
       *, *::before, *::after {
@@ -88,7 +80,7 @@
         outline-offset: 3px !important;
       }
 
-      /* Three.js Background Canvas */
+      /* Three.js Background Canvas with Strict Containment */
       #webgl-bg {
         position: fixed;
         top: 0;
@@ -98,6 +90,7 @@
         z-index: 1;
         pointer-events: none;
         opacity: 0.28;
+        contain: strict;
       }
 
       /* Content Container */
@@ -1136,8 +1129,16 @@
         });
       });
 
-      // 2. Performance-Deferred Three.js Loader (Executes only after main thread settles)
+      // 2. High-Performance Three.js Loader (Post-Interaction / Idle Only)
+      let threeLoaded = false;
       const initThreeMesh = () => {
+        if (threeLoaded) return;
+        threeLoaded = true;
+
+        ['touchstart', 'scroll', 'mousemove'].forEach((evt) =>
+          window.removeEventListener(evt, initThreeMesh)
+        );
+
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
         script.async = true;
@@ -1149,11 +1150,11 @@
           const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
           camera.position.z = 26;
 
-          const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+          const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
           renderer.setSize(window.innerWidth, window.innerHeight);
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+          renderer.setPixelRatio(1);
 
-          const geometry = new THREE.TorusKnotGeometry(9, 2.2, 80, 16, 2, 3);
+          const geometry = new THREE.TorusKnotGeometry(9, 2.2, 50, 12, 2, 3);
           const material = new THREE.MeshBasicMaterial({
             color: 0xE6CA65,
             wireframe: true,
@@ -1181,8 +1182,8 @@
           function renderLoop() {
             mouseX += (targetX - mouseX) * 0.05;
             mouseY += (targetY - mouseY) * 0.05;
-            mesh.rotation.x += 0.0018 + mouseY * 0.008;
-            mesh.rotation.y += 0.0025 + mouseX * 0.008;
+            mesh.rotation.x += 0.0015 + mouseY * 0.006;
+            mesh.rotation.y += 0.002 + mouseX * 0.006;
             renderer.render(scene, camera);
             requestAnimationFrame(renderLoop);
           }
@@ -1191,11 +1192,10 @@
         document.body.appendChild(script);
       };
 
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(initThreeMesh);
-      } else {
-        window.addEventListener('load', initThreeMesh);
-      }
+      ['touchstart', 'scroll', 'mousemove'].forEach((evt) =>
+        window.addEventListener(evt, initThreeMesh, { passive: true, once: true })
+      );
+      setTimeout(initThreeMesh, 4000);
     </script>
   </body>
 </html>
