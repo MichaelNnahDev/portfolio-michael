@@ -1,35 +1,6 @@
 ---
 // src/pages/index.astro
 // Static build with zero runtime server overhead
-import { client } from '../lib/sanity.js';
-
-// Batch fetch all portfolio data from Sanity
-const query = `{
-  "projects": *[_type == "project"] | order(orderRank asc){
-    _id,
-    title,
-    subtitle,
-    liveUrl,
-    tags,
-    orderRank
-  },
-  "hero": *[_type == "heroSection"][0],
-  "techStack": *[_type == "techStackSection"][0],
-  "repos": *[_type == "repository"] | order(orderRank asc){
-    _id,
-    name,
-    description,
-    languageText,
-    languageDotClass,
-    repoUrl,
-    orderRank
-  },
-  "bio": *[_type == "engineerBio"][0],
-  "matrix": *[_type == "comparisonMatrix"][0],
-  "cta": *[_type == "ctaSection"][0]
-}`;
-
-const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetch(query);
 ---
 
 <!doctype html>
@@ -739,23 +710,17 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
           <div>
             <div class="status-badge">
               <span class="pulse-indicator" aria-hidden="true"></span>
-              <span>{hero?.statusBadgeText || "6/6 Production Systems Monitored & Live"}</span>
+              <span>6/6 Production Systems Monitored &amp; Live</span>
             </div>
             <h1 class="hero-h1">
-              {hero?.headingPrefix || "High-Performance"}{' '}
-              <span class="gold-highlight">{hero?.headingHighlight || "WordPress"}</span>{' '}
-              {hero?.headingSuffix || "& Cloud Systems."}
+              High-Performance <span class="gold-highlight">WordPress</span> &amp; Cloud Systems.
             </h1>
             <p class="hero-p">
-              {hero?.paragraph || "Replacing bloated plugins with lightweight custom PHP, orchestrating zero-downtime server migrations between Hostinger and Cloudflare edge layers, and automating Linux root operations."}
+              Replacing bloated plugins with lightweight custom PHP, orchestrating zero-downtime server migrations between Hostinger and Cloudflare edge layers, and automating Linux root operations.
             </p>
             <div class="hero-actions">
-              <a href={hero?.primaryBtnUrl || "#projects"} class="btn-gold">
-                {hero?.primaryBtnText || "Explore Live Systems →"}
-              </a>
-              <a href={hero?.secondaryBtnUrl || "https://www.upwork.com"} target="_blank" rel="noopener noreferrer" class="btn-ghost">
-                {hero?.secondaryBtnText || "Hire On Upwork"}
-              </a>
+              <a href="#projects" class="btn-gold">Explore Live Systems &rarr;</a>
+              <a href="https://www.upwork.com" target="_blank" rel="noopener noreferrer" class="btn-ghost">Hire On Upwork</a>
             </div>
           </div>
 
@@ -782,28 +747,20 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
 
         <!-- Tech Stack Badges -->
         <section class="stack-section" aria-label="Technical stack">
-          <span class="section-tag">{techStack?.sectionTag || "Engineering & Cloud Stack"}</span>
+          <span class="section-tag">Engineering &amp; Cloud Stack</span>
           <div class="stack-grid">
-            {techStack?.skills?.length ? (
-              techStack.skills.map((skill: string) => (
-                <div class="stack-pill">{skill}</div>
-              ))
-            ) : (
-              <>
-                <div class="stack-pill">Hostinger Origin</div>
-                <div class="stack-pill">AWS (EC2 / S3)</div>
-                <div class="stack-pill">Cloudflare CDN Edge</div>
-                <div class="stack-pill">Linux CLI &amp; Bash</div>
-                <div class="stack-pill">Ubuntu Server</div>
-                <div class="stack-pill">Git &amp; GitHub</div>
-                <div class="stack-pill">PHP 8.2 (MU-Plugins)</div>
-                <div class="stack-pill">WooCommerce Core</div>
-                <div class="stack-pill">Elementor Engine</div>
-                <div class="stack-pill">JavaScript (ES6+)</div>
-                <div class="stack-pill">HTML5 / Modern CSS</div>
-                <div class="stack-pill">WP Code Snippets</div>
-              </>
-            )}
+            <div class="stack-pill">Hostinger Origin</div>
+            <div class="stack-pill">AWS (EC2 / S3)</div>
+            <div class="stack-pill">Cloudflare CDN Edge</div>
+            <div class="stack-pill">Linux CLI &amp; Bash</div>
+            <div class="stack-pill">Ubuntu Server</div>
+            <div class="stack-pill">Git &amp; GitHub</div>
+            <div class="stack-pill">PHP 8.2 (MU-Plugins)</div>
+            <div class="stack-pill">WooCommerce Core</div>
+            <div class="stack-pill">Elementor Engine</div>
+            <div class="stack-pill">JavaScript (ES6+)</div>
+            <div class="stack-pill">HTML5 / Modern CSS</div>
+            <div class="stack-pill">WP Code Snippets</div>
           </div>
         </section>
 
@@ -813,26 +770,113 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
           <h2 class="section-h2">Production Platforms Managed</h2>
 
           <div class="portfolio-grid">
-            {projects && projects.map((item: any) => (
-              <div class="project-card">
-                <div>
-                  <h3 class="card-h3">{item.title}</h3>
-                  {item.subtitle && <div class="card-subtitle">{item.subtitle}</div>}
-                  {item.tags && item.tags.length > 0 && (
-                    <div class="tags-wrapper">
-                      {item.tags.map((tag: string) => (
-                        <span class="p-tag p-tag-gold">{tag}</span>
-                      ))}
-                    </div>
-                  )}
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Hammer And Host</h3>
+                <div class="card-subtitle">Consultancy &amp; Agency Brand Suite</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Optimized Lead Forms</span>
+                  <span class="p-tag">Cloudflare Edge</span>
+                  <span class="p-tag">Elementor Engine</span>
                 </div>
-                {item.liveUrl && (
-                  <a href={item.liveUrl} target="_blank" rel="noopener noreferrer" class="launch-link">
-                    Launch Live Site &nearr;
-                  </a>
-                )}
               </div>
-            ))}
+              <a href="https://www.hammerandhost.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Lifebridgecare Foundation</h3>
+                <div class="card-subtitle">NGO Brand Suite &amp; Direct Donations</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Optimized Lead Forms</span>
+                  <span class="p-tag">AWS S3 Backups</span>
+                  <span class="p-tag">Custom Modal Trigger</span>
+                </div>
+              </div>
+              <a href="https://www.lifebridgecarefoundation.ng" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Zanywholesales Hub</h3>
+                <div class="card-subtitle">High-Volume Wholesale E-Commerce</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Custom Checkout (Proof Upload)</span>
+                  <span class="p-tag p-tag-gold">Social Proof Popup Snippet</span>
+                  <span class="p-tag">Cloudflare CDN Edge</span>
+                </div>
+              </div>
+              <a href="https://www.zanywholesaleshub.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Shop With Simi</h3>
+                <div class="card-subtitle">Digital Commerce Solution</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Custom Checkout (Proof Upload)</span>
+                  <span class="p-tag">Cloudflare CDN Edge</span>
+                  <span class="p-tag">WooCommerce</span>
+                </div>
+              </div>
+              <a href="https://www.shopwithsimi.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">Michelleaccessorize</h3>
+                <div class="card-subtitle">Digital Commerce Solution</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag p-tag-gold">Custom Checkout (Proof Upload)</span>
+                  <span class="p-tag">Cloudflare CDN Edge</span>
+                  <span class="p-tag">WooCommerce</span>
+                </div>
+              </div>
+              <a href="https://www.michelleaccessorize.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
+
+            <div class="project-card">
+              <div>
+                <h3 class="card-h3">CSK Hospitality</h3>
+                <div class="card-subtitle">Hospitality Brand Suite &amp; Bookings</div>
+                <div class="tags-wrapper">
+                  <span class="p-tag p-tag-gold">Hostinger Origin</span>
+                  <span class="p-tag p-tag-gold">Grade-A Security Headers</span>
+                  <span class="p-tag p-tag-gold">Native SEO Matrix / Social Graph PHP</span>
+                  <span class="p-tag">Cloudflare SSL/TLS</span>
+                  <span class="p-tag">Dynamic UI Routing</span>
+                  <span class="p-tag">Hostinger CLI</span>
+                </div>
+              </div>
+              <a href="https://www.cskhospitality.com" target="_blank" rel="noopener noreferrer" class="launch-link">
+                Launch Live Site &nearr;
+              </a>
+            </div>
           </div>
         </section>
 
@@ -842,30 +886,117 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
           <h2 class="section-h2">Developer Repositories &amp; Modules</h2>
 
           <div class="github-grid">
-            {repos && repos.length > 0 ? (
-              repos.map((repo: any) => (
-                <div class="github-card">
-                  <div>
-                    <div class="gh-header">
-                      <span class="gh-name">{repo.name}</span>
-                      <span class="gh-icon" aria-hidden="true">&prop;</span>
-                    </div>
-                    <p class="gh-desc">{repo.description}</p>
-                  </div>
-                  <div class="gh-footer">
-                    <span class="gh-lang">
-                      <span class={`gh-lang-dot ${repo.languageDotClass || 'dot-php'}`}></span>{' '}
-                      {repo.languageText}
-                    </span>
-                    <a href={repo.repoUrl} target="_blank" rel="noopener noreferrer" class="gh-link">
-                      Inspect Code &nearr;
-                    </a>
-                  </div>
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">aws-s3-backup-autoupdate-engine</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
                 </div>
-              ))
-            ) : (
-              <p style="color: var(--text-muted);">No repositories found.</p>
-            )}
+                <p class="gh-desc">
+                  Automated 5 AM daily MySQL &amp; site file backup to Amazon S3 with staggered plugin/theme update routines, cache flush, and email health alerts.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-php"></span> PHP / AWS SDK</span>
+                <a href="https://github.com/MichaelNnahDev/aws-s3-backup-autoupdate-engine" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">woocommerce-checkout-payment-proof</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Zero-plugin WooCommerce checkout extension injecting multipart payment proof receipt upload validation into order metadata and fulfillment screens.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-php"></span> PHP / WooCommerce</span>
+                <a href="https://github.com/MichaelNnahDev/woocommerce-checkout-payment-proof-upload.git" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">lightweight-social-proof-engine</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  High-converting, zero-bloat recent sales notification popup engine querying live order records asynchronously without degrading Core Web Vitals.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-js"></span> JavaScript / PHP</span>
+                <a href="https://github.com/MichaelNnahDev/flashproof-sales-popup-for-woo" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">wp-native-seo-social-graph</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Lightweight head injection script generating Open Graph meta, Twitter Cards, canonical tagging, and favicon matrices without third-party SEO plugins.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-php"></span> PHP / Head Hook</span>
+                <a href="https://github.com/MichaelNnahDev/wp-native-seo-social-graph" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">zero-downtime-cloudflare-migration</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Step-by-step low-TTL DNS staging and proxy cutover runbook for transitioning live e-commerce production origins to Cloudflare CDN edge without downtime.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-config"></span> Cloudflare / DNS</span>
+                <a href="https://github.com/MichaelNnahDev/zero-downtime-cloudflare-migration" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">wordpress-security-headers-hardening</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Hardened server rules deploying HSTS, CSP, and clickjacking protection achieving Grade-A+ SecurityHeaders rating.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-config"></span> Apache / .htaccess</span>
+                <a href="https://github.com/MichaelNnahDev/security-headers-wordpress-hardening.git" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
+
+            <div class="github-card">
+              <div>
+                <div class="gh-header">
+                  <span class="gh-name">hostinger-linux-ssh-automation</span>
+                  <span class="gh-icon" aria-hidden="true">&prop;</span>
+                </div>
+                <p class="gh-desc">
+                  Linux CLI configuration guide for key-based authentication, custom SSH port mapping, persistent multiplexing, and automated terminal aliases.
+                </p>
+              </div>
+              <div class="gh-footer">
+                <span class="gh-lang"><span class="gh-lang-dot dot-bash"></span> Bash / OpenSSH</span>
+                <a href="https://github.com/MichaelNnahDev/hostinger-linux-ssh-automation" target="_blank" rel="noopener noreferrer" class="gh-link">Inspect Code &nearr;</a>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -874,7 +1005,7 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
           <div class="engineer-image-wrapper">
             <img
               src="/images/profile.webp"
-              alt={`${bio?.name || "Michael Nnah"} - ${bio?.title || "WordPress Performance and Cloud Infrastructure Engineer"}`}
+              alt="Michael Nnah - WordPress Performance and Cloud Infrastructure Engineer"
               width="320"
               height="397"
               loading="lazy"
@@ -883,19 +1014,18 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
           </div>
 
           <div class="engineer-bio">
-            <h3>{bio?.name || "Michael Nnah"}</h3>
-            <span class="engineer-title">{bio?.title || "WordPress Performance & Cloud Infrastructure Engineer"}</span>
+            <h3>Michael Nnah</h3>
+            <span class="engineer-title">WordPress Performance &amp; Cloud Infrastructure Engineer</span>
             <p>
-              {bio?.bioParagraph1 || "I operate at the intersection of custom WordPress development and Linux cloud administration. While many freelancers rely heavily on off-the-shelf plugins that cause database drag and security vulnerabilities, my workflow centers on clean PHP hooks, custom MU-plugins, and terminal-level optimization."}
+              I operate at the intersection of custom WordPress development and Linux cloud administration. While many freelancers rely heavily on off-the-shelf plugins that cause database drag and security vulnerabilities, my workflow centers on clean PHP hooks, custom MU-plugins, and terminal-level optimization.
             </p>
             <p>
-              {bio?.bioParagraph2 || "Whether configuring zero-downtime Cloudflare edge proxies, hardening Hostinger origin nodes with Grade-A HTTP headers, or automating encrypted daily MySQL snapshots to Amazon S3, every site is engineered for peak conversion and continuous uptime."}
+              Whether configuring zero-downtime Cloudflare edge proxies, hardening Hostinger origin nodes with Grade-A HTTP headers, or automating encrypted daily MySQL snapshots to Amazon S3, every site is engineered for peak conversion and continuous uptime.
             </p>
             <div class="guarantee-box">
               <span class="guarantee-icon" aria-hidden="true">&lowast;</span>
               <div class="guarantee-text">
-                <strong>{bio?.guaranteeHeading || "The Zero-Downtime Migration Standard:"}</strong>{' '}
-                {bio?.guaranteeText || "Every DNS cutover, database transition, and CDN edge deployment is engineered with low-TTL propagation bridges and transactional integrity — protecting active checkouts and customer orders from disruption."}
+                <strong>The Zero-Downtime Migration Standard:</strong> Every DNS cutover, database transition, and CDN edge deployment is engineered with low-TTL propagation bridges and transactional integrity — protecting active checkouts and customer orders from disruption.
               </div>
             </div>
           </div>
@@ -903,13 +1033,9 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
 
         <!-- Comparison Matrix -->
         <section class="comparison-section" aria-label="Engineering Standards Comparison">
-          <span class="section-tag">{matrix?.sectionTag || "Engineering Difference"}</span>
-          <h2 class="section-h2" style="font-size: clamp(1.4rem, 3.5vw, 1.8rem); margin-bottom: 8px;">
-            {matrix?.heading || "Code-First Engineering vs Plugin Overload"}
-          </h2>
-          <p style="color: var(--text-muted); font-size: 0.92rem;">
-            {matrix?.subheading || "Direct comparisons of how these production environments operate compared to generic site setups."}
-          </p>
+          <span class="section-tag">Engineering Difference</span>
+          <h2 class="section-h2" style="font-size: clamp(1.4rem, 3.5vw, 1.8rem); margin-bottom: 8px;">Code-First Engineering vs Plugin Overload</h2>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">Direct comparisons of how these production environments operate compared to generic site setups.</p>
 
           <div class="table-scroll">
             <table class="comp-table">
@@ -921,38 +1047,26 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
                 </tr>
               </thead>
               <tbody>
-                {matrix?.rows && matrix.rows.length > 0 ? (
-                  matrix.rows.map((row: any) => (
-                    <tr>
-                      <th scope="row">{row.vector}</th>
-                      <td>{row.standardApproach}</td>
-                      <td class="focus-gold">{row.myApproach}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <>
-                    <tr>
-                      <th scope="row">Checkout &amp; Features</th>
-                      <td>Installs 3–5 heavy third-party plugins</td>
-                      <td class="focus-gold">Lightweight PHP Snippets (Payment Proof, Modals &amp; Popups)</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Security &amp; SEO Graph</th>
-                      <td>Unconfigured shared headers</td>
-                      <td class="focus-gold">Grade-A HTTP Security Headers + Lightweight PHP Social Graph</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Origin &amp; Edge Routing</th>
-                      <td>Standard DNS with migration downtime</td>
-                      <td class="focus-gold">Hardened Hostinger Origin + Zero-Downtime Cloudflare Edge</td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Backups &amp; Redundancy</th>
-                      <td>Manual local zip exports</td>
-                      <td class="focus-gold">Automated Daily Encrypted Snapshots to Amazon S3</td>
-                    </tr>
-                  </>
-                )}
+                <tr>
+                  <th scope="row">Checkout &amp; Features</th>
+                  <td>Installs 3–5 heavy third-party plugins</td>
+                  <td class="focus-gold">Lightweight PHP Snippets (Payment Proof, Modals &amp; Popups)</td>
+                </tr>
+                <tr>
+                  <th scope="row">Security &amp; SEO Graph</th>
+                  <td>Unconfigured shared headers</td>
+                  <td class="focus-gold">Grade-A HTTP Security Headers + Lightweight PHP Social Graph</td>
+                </tr>
+                <tr>
+                  <th scope="row">Origin &amp; Edge Routing</th>
+                  <td>Standard DNS with migration downtime</td>
+                  <td class="focus-gold">Hardened Hostinger Origin + Zero-Downtime Cloudflare Edge</td>
+                </tr>
+                <tr>
+                  <th scope="row">Backups &amp; Redundancy</th>
+                  <td>Manual local zip exports</td>
+                  <td class="focus-gold">Automated Daily Encrypted Snapshots to Amazon S3</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -960,13 +1074,11 @@ const { projects, hero, techStack, repos, bio, matrix, cta } = await client.fetc
 
         <!-- Footer Call to Action -->
         <footer class="footer-cta">
-          <h2>{cta?.heading || "Need Enterprise-Grade WordPress?"}</h2>
+          <h2>Need Enterprise-Grade WordPress?</h2>
           <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 28px auto; font-size: 0.95rem;">
-            {cta?.description || "Available for zero-downtime migrations, plugin-free WooCommerce custom engineering, and automated cloud retainers."}
+            Available for zero-downtime migrations, plugin-free WooCommerce custom engineering, and automated cloud retainers.
           </p>
-          <a href={cta?.buttonUrl || "https://www.upwork.com"} target="_blank" rel="noopener noreferrer" class="btn-gold">
-            {cta?.buttonText || "Hire on Upwork Today →"}
-          </a>
+          <a href="https://www.upwork.com" target="_blank" rel="noopener noreferrer" class="btn-gold">Hire on Upwork Today &rarr;</a>
         </footer>
       </main>
     </div>
