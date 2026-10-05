@@ -19,6 +19,8 @@ export async function getStaticPaths() {
 }
 
 const { page } = Astro.props;
+
+const whatsappUrl = "https://wa.me/2348109957259?text=" + encodeURIComponent("I am interested in your web development services coming from your portfolio");
 ---
 
 <!doctype html>
@@ -32,27 +34,35 @@ const { page } = Astro.props;
     <link rel="shortcut icon" href="/favicon.ico?v=2" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>{page.title} | Michael Nnah</title>
-    <meta name="description" content={page.seoDescription || page.title} />
+    <title>{page.title} | Michael Nnah — Full-Stack Web & Cloud Infrastructure Engineer</title>
+    <meta name="description" content={page.seoDescription || `${page.title} — Decoupled frontend architectures, headless systems, and high-availability cloud deployments by Michael Nnah.`} />
 
     <style is:inline>
       :root {
         --bg-base: #0B0C10;
         --card-surface: rgba(18, 20, 26, 0.88);
         --border-subtle: #20242D;
+        --border-gold: #E6CA65;
         --gold-primary: #E6CA65;
         --gold-glow: rgba(230, 202, 101, 0.18);
         --text-pure: #FFFFFF;
         --text-alabaster: #F4F4F6;
         --text-muted: #9CA3AF;
+        --focus-blue: #60a5fa;
         --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        --font-mono: 'Fira Code', monospace;
+        --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       }
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html { background-color: var(--bg-base); color: var(--text-alabaster); font-family: var(--font-body); }
+      html { background-color: var(--bg-base); color: var(--text-alabaster); font-family: var(--font-body); line-height: 1.6; }
       body { min-height: 100vh; position: relative; overflow-x: hidden; }
+
+      /* Strict Accessible Focus Rings */
+      *:focus-visible {
+        outline: 3px solid var(--focus-blue) !important;
+        outline-offset: 3px !important;
+      }
 
       #webgl-bg {
         position: fixed;
@@ -106,6 +116,7 @@ const { page } = Astro.props;
         font-weight: 800;
         margin-bottom: 16px;
         letter-spacing: -0.01em;
+        text-transform: uppercase;
       }
       .page-sub {
         font-size: 1.05rem;
@@ -253,6 +264,49 @@ const { page } = Astro.props;
         margin-top: auto;
       }
 
+      /* Call to Action Section */
+      .page-cta {
+        text-align: center;
+        padding: clamp(36px, 6vw, 56px) 20px;
+        background: radial-gradient(circle at center, rgba(230, 202, 101, 0.08) 0%, transparent 70%);
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        backdrop-filter: blur(12px);
+        margin-top: 60px;
+      }
+
+      .page-cta h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+        font-weight: 800;
+        color: var(--text-pure);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+
+      .btn-gold {
+        min-height: 48px;
+        padding: 12px 28px;
+        border-radius: 8px;
+        font-family: var(--font-heading);
+        font-size: 0.92rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: var(--gold-primary);
+        color: #0B0C10;
+        font-weight: 700;
+        transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .btn-gold:hover {
+        background: #FFFFFF;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px var(--gold-glow);
+      }
+
       /* Responsive Breakpoints */
       @media (max-width: 900px) {
         .layout-grid-3 {
@@ -269,6 +323,9 @@ const { page } = Astro.props;
         .layout-grid-2 .gallery-figure img,
         .layout-grid-3 .gallery-figure img {
           aspect-ratio: 16 / 10;
+        }
+        .btn-gold {
+          width: 100%;
         }
       }
     </style>
@@ -337,10 +394,36 @@ const { page } = Astro.props;
               </section>
             );
 
+          case 'ctaBlock':
+            return (
+              <footer class="page-cta">
+                <h2>{block.heading || "Ready to Engineer Your Next Platform?"}</h2>
+                <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 24px auto; font-size: 0.95rem;">
+                  {block.description || "Discuss custom frontend architectures, headless integrations, or AWS cloud infrastructure."}
+                </p>
+                <a href={block.buttonUrl || whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-gold">
+                  {block.buttonText || "Send a DM on WhatsApp →"}
+                </a>
+              </footer>
+            );
+
           default:
             return null;
         }
       })}
+
+      <!-- Global Fallback CTA if no custom ctaBlock exists on the page -->
+      {!page.pageBuilder?.some((b: any) => b._type === 'ctaBlock') && (
+        <footer class="page-cta">
+          <h2>Ready to Engineer Your Next Platform?</h2>
+          <p style="color: var(--text-muted); max-width: 520px; margin: 0 auto 24px auto; font-size: 0.95rem;">
+            Available for modern Astro &amp; Next.js builds, headless architectures, published plugin development, and AWS cloud migrations.
+          </p>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-gold">
+            Send a DM on WhatsApp →
+          </a>
+        </footer>
+      )}
     </main>
 
     <!-- Deferred Interactive Three.js Script -->
