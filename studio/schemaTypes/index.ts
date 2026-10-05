@@ -5,6 +5,11 @@ import { techStackSection } from './techStackSection'
 import { repository } from './repository'
 import { engineerBio } from './engineerBio'
 import { comparisonMatrix } from './comparisonMatrix'
+import { page } from './page'
+import { pageHeroBlock } from './blocks/pageHeroBlock'
+import { richTextBlock } from './blocks/richTextBlock'
+import { featureGridBlock } from './blocks/featureGridBlock'
+import { imageGalleryBlock } from './blocks/imageGalleryBlock'
 
 export const projectType = defineType({
   name: 'project',
@@ -50,4 +55,9 @@ export const schemaTypes = [
   engineerBio,
   comparisonMatrix,
   ctaSection,
+  page,
+  pageHeroBlock,
+  richTextBlock,
+  featureGridBlock,
+  imageGalleryBlock,
 ]

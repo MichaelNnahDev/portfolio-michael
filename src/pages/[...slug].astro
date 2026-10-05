@@ -1,0 +1,361 @@
+---
+import { client } from '../lib/sanity.js';
+import { urlFor } from '../lib/sanityImage.js';
+
+export async function getStaticPaths() {
+  const pages = await client.fetch(`*[_type == "page" && defined(slug.current)]{
+    title,
+    "slug": slug.current,
+    seoDescription,
+    pageBuilder[]{
+      ...
+    }
+  }`);
+
+  return pages.map((page: any) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+const { page } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{page.title} | Michael Nnah</title>
+    <meta name="description" content={page.seoDescription || page.title} />
+
+    <style is:inline>
+      :root {
+        --bg-base: #0B0C10;
+        --card-surface: rgba(18, 20, 26, 0.88);
+        --border-subtle: #20242D;
+        --gold-primary: #E6CA65;
+        --gold-glow: rgba(230, 202, 101, 0.18);
+        --text-pure: #FFFFFF;
+        --text-alabaster: #F4F4F6;
+        --text-muted: #9CA3AF;
+        --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-mono: 'Fira Code', monospace;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { background-color: var(--bg-base); color: var(--text-alabaster); font-family: var(--font-body); }
+      body { min-height: 100vh; position: relative; overflow-x: hidden; }
+
+      #webgl-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.28;
+        contain: strict;
+      }
+
+      .container {
+        position: relative;
+        z-index: 2;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: clamp(30px, 6vw, 60px) clamp(16px, 4vw, 32px);
+      }
+
+      .back-nav { margin-bottom: 40px; }
+      .back-link {
+        font-family: var(--font-mono);
+        color: var(--gold-primary);
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: gap 0.2s ease, color 0.2s ease;
+      }
+      .back-link:hover { gap: 10px; color: #FFFFFF; }
+
+      /* Page Hero Block */
+      .page-hero { margin-bottom: 50px; }
+      .page-badge {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--gold-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 12px;
+      }
+      .page-h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        color: var(--text-pure);
+        line-height: 1.15;
+        font-weight: 800;
+        margin-bottom: 16px;
+        letter-spacing: -0.01em;
+      }
+      .page-sub {
+        font-size: 1.05rem;
+        color: var(--text-muted);
+        max-width: 700px;
+        line-height: 1.6;
+      }
+
+      /* Feature Grid Block */
+      .grid-block { margin-bottom: 60px; }
+      .grid-heading {
+        font-family: var(--font-heading);
+        font-size: clamp(1.4rem, 3.5vw, 1.8rem);
+        font-weight: 800;
+        color: var(--text-pure);
+        margin-bottom: 24px;
+        text-transform: uppercase;
+      }
+      .cards-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      .card-item {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 24px;
+        backdrop-filter: blur(12px);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+      .card-item:hover {
+        border-color: var(--gold-primary);
+        transform: translateY(-3px);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.75), 0 0 16px var(--gold-glow);
+      }
+      .card-tag {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--gold-primary);
+        margin-bottom: 8px;
+        display: block;
+        font-weight: 600;
+      }
+      .card-item h3 {
+        font-family: var(--font-heading);
+        color: var(--text-pure);
+        font-size: 1.18rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .card-item p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      /* Rich Text Block */
+      .rich-block {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 32px;
+        margin-bottom: 50px;
+        white-space: pre-wrap;
+        line-height: 1.7;
+        color: var(--text-alabaster);
+        backdrop-filter: blur(12px);
+      }
+
+      /* Image Gallery Block */
+      .gallery-block {
+        margin-bottom: 60px;
+      }
+      .gallery-caption {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+      }
+      .gallery-container {
+        display: grid;
+        gap: 20px;
+      }
+      .layout-full {
+        grid-template-columns: 1fr;
+      }
+      .layout-grid-2 {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      }
+      .layout-grid-3 {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .gallery-figure {
+        background: var(--card-surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 0;
+      }
+      .gallery-figure img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease;
+      }
+      .gallery-figure:hover img {
+        transform: scale(1.02);
+      }
+      .fig-caption {
+        padding: 10px 14px;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border-subtle);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="webgl-bg" aria-hidden="true"></canvas>
+
+    <main class="container">
+      <div class="back-nav">
+        <a href="/" class="back-link">&larr; Return to Terminal Root</a>
+      </div>
+
+      {page.pageBuilder?.map((block: any) => {
+        switch (block._type) {
+          case 'pageHeroBlock':
+            return (
+              <section class="page-hero">
+                {block.badge && <span class="page-badge">{block.badge}</span>}
+                <h1 class="page-h1">{block.heading}</h1>
+                {block.subheading && <p class="page-sub">{block.subheading}</p>}
+              </section>
+            );
+
+          case 'featureGridBlock':
+            return (
+              <section class="grid-block">
+                {block.sectionTag && <span class="page-badge">{block.sectionTag}</span>}
+                {block.heading && <h2 class="grid-heading">{block.heading}</h2>}
+                <div class="cards-wrapper">
+                  {block.items?.map((item: any) => (
+                    <div class="card-item">
+                      {item.badge && <span class="card-tag">{item.badge}</span>}
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            );
+
+          case 'richTextBlock':
+            return (
+              <article class="rich-block">
+                {block.content}
+              </article>
+            );
+
+          case 'imageGalleryBlock':
+            const layoutClass = `layout-${block.layout || 'full'}`;
+            return (
+              <section class="gallery-block">
+                {block.caption && <p class="gallery-caption">{block.caption}</p>}
+                <div class={`gallery-container ${layoutClass}`}>
+                  {block.images?.map((img: any) => (
+                    <figure class="gallery-figure">
+                      <img
+                        src={urlFor(img).width(1200).auto('format').quality(85).url()}
+                        alt={img.alt || page.title}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      {img.caption && <figcaption class="fig-caption">{img.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              </section>
+            );
+
+          default:
+            return null;
+        }
+      })}
+    </main>
+
+    <!-- Deferred Interactive Three.js Script -->
+    <script is:inline>
+      let threeLoaded = false;
+      const initThreeMesh = () => {
+        if (threeLoaded) return;
+        threeLoaded = true;
+
+        ['touchstart', 'scroll', 'mousemove'].forEach((evt) =>
+          window.removeEventListener(evt, initThreeMesh)
+        );
+
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+        script.async = true;
+        script.onload = () => {
+          const canvas = document.getElementById('webgl-bg');
+          if (!canvas || typeof THREE === 'undefined') return;
+
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+          camera.position.z = 26;
+
+          const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false, powerPreference: 'low-power' });
+          renderer.setSize(window.innerWidth, window.innerHeight);
+          renderer.setPixelRatio(1);
+
+          const geometry = new THREE.TorusKnotGeometry(9, 2.2, 50, 12, 2, 3);
+          const material = new THREE.MeshBasicMaterial({
+            color: 0xE6CA65,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.12
+          });
+
+          const mesh = new THREE.Mesh(geometry, material);
+          scene.add(mesh);
+
+          let mouseX = 0, mouseY = 0;
+          let targetX = 0, targetY = 0;
+
+          window.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 1.2;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 1.2;
+          }, { passive: true });
+
+          window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+          }, { passive: true });
+
+          function renderLoop() {
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+            mesh.rotation.x += 0.0015 + mouseY * 0.006;
+            mesh.rotation.y += 0.002 + mouseX * 0.006;
+            renderer.render(scene, camera);
+            requestAnimationFrame(renderLoop);
+          }
+          renderLoop();
+        };
+        document.body.appendChild(script);
+      };
+
+      ['touchstart', 'scroll', 'mousemove'].forEach((evt) =>
+        window.addEventListener(evt, initThreeMesh, { passive: true, once: true })
+      );
+      setTimeout(initThreeMesh, 4000);
+    </script>
+  </body>
+</html>
