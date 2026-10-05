@@ -1,0 +1,21 @@
+name: Trigger Hostinger Rebuild on Sanity Publish
+
+on:
+  repository_dispatch:
+    types: [sanity-publish]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Trigger Hostinger via Empty Commit
+        run: |
+          git config user.name "Sanity CMS Automation"
+          git config user.email "bot@michaelnnah.com"
+          git commit --allow-empty -m "chore(cms): trigger automated hostinger rebuild [skip ci]"
+          git push origin main
