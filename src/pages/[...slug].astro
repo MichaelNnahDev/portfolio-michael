@@ -172,49 +172,98 @@ const { page } = Astro.props;
 
       /* Image Gallery Block */
       .gallery-block {
-        margin-bottom: 60px;
+        margin: 50px 0 60px;
+        width: 100%;
       }
       .gallery-caption {
         font-family: var(--font-mono);
         font-size: 0.8rem;
         color: var(--text-muted);
-        margin-bottom: 16px;
+        margin-bottom: 20px;
       }
       .gallery-container {
         display: grid;
-        gap: 20px;
+        gap: 24px;
+        width: 100%;
       }
+
+      /* Layout: Single Full-Width Feature Image */
       .layout-full {
         grid-template-columns: 1fr;
+        max-width: 850px;
+        margin: 0 auto;
       }
+      .layout-full .gallery-figure img {
+        aspect-ratio: 16 / 9;
+        max-height: 520px;
+      }
+
+      /* Layout: 2-Column Grid */
       .layout-grid-2 {
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
       }
+      .layout-grid-2 .gallery-figure img {
+        aspect-ratio: 4 / 3;
+      }
+
+      /* Layout: 3-Column Grid */
       .layout-grid-3 {
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
       }
+      .layout-grid-3 .gallery-figure img {
+        aspect-ratio: 1 / 1;
+      }
+
+      /* Standardized Figure Shell */
       .gallery-figure {
         background: var(--card-surface);
         border: 1px solid var(--border-subtle);
         border-radius: 12px;
         overflow: hidden;
         margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       }
       .gallery-figure img {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
         display: block;
-        transition: transform 0.3s ease;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .gallery-figure:hover img {
-        transform: scale(1.02);
+        transform: scale(1.03);
       }
       .fig-caption {
-        padding: 10px 14px;
+        padding: 12px 16px;
         font-family: var(--font-mono);
         font-size: 0.75rem;
         color: var(--text-muted);
+        background: rgba(11, 12, 16, 0.95);
         border-top: 1px solid var(--border-subtle);
+        margin-top: auto;
+      }
+
+      /* Responsive Breakpoints */
+      @media (max-width: 900px) {
+        .layout-grid-3 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .layout-grid-2,
+        .layout-grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .layout-full .gallery-figure img,
+        .layout-grid-2 .gallery-figure img,
+        .layout-grid-3 .gallery-figure img {
+          aspect-ratio: 16 / 10;
+        }
       }
     </style>
   </head>
@@ -262,7 +311,7 @@ const { page } = Astro.props;
             );
 
           case 'imageGalleryBlock':
-            const layoutClass = `layout-${block.layout || 'full'}`;
+            const layoutClass = `layout-${block.layout || 'grid-3'}`;
             return (
               <section class="gallery-block">
                 {block.caption && <p class="gallery-caption">{block.caption}</p>}
